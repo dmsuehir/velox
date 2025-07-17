@@ -951,4 +951,14 @@ struct MillisToTimestampFunction {
   }
 };
 
+template <typename TExec>
+struct SecondsToTimestampFunction {
+  VELOX_DEFINE_FUNCTION_TYPES(TExec);
+
+  template <typename T>
+  FOLLY_ALWAYS_INLINE void call(out_type<Timestamp>& result, const T& millis) {
+    result = Timestamp::fromSecondsNoError(millis);
+  }
+};
+
 } // namespace facebook::velox::functions::sparksql

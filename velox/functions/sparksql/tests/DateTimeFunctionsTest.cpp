@@ -42,6 +42,10 @@ class DateTimeFunctionsTest : public SparkFunctionBaseTest {
   static constexpr int8_t kMaxTinyint = std::numeric_limits<int8_t>::max();
   static constexpr int64_t kMinBigint = std::numeric_limits<int64_t>::min();
   static constexpr int64_t kMaxBigint = std::numeric_limits<int64_t>::max();
+  static constexpr double kMinDouble = std::numeric_limits<double>::min();
+  static constexpr double kMaxDouble = std::numeric_limits<double>::max();
+  static constexpr double kMinFloat = std::numeric_limits<float>::min();
+  static constexpr double kMaxFloat = std::numeric_limits<float>::max();
 
  protected:
   void setQueryTimeZone(const std::string& timeZone) {
