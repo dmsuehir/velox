@@ -42,10 +42,6 @@ class DateTimeFunctionsTest : public SparkFunctionBaseTest {
   static constexpr int8_t kMaxTinyint = std::numeric_limits<int8_t>::max();
   static constexpr int64_t kMinBigint = std::numeric_limits<int64_t>::min();
   static constexpr int64_t kMaxBigint = std::numeric_limits<int64_t>::max();
-  static constexpr double kMinDouble = std::numeric_limits<double>::min();
-  static constexpr double kMaxDouble = std::numeric_limits<double>::max();
-  static constexpr double kMinFloat = std::numeric_limits<float>::min();
-  static constexpr double kMaxFloat = std::numeric_limits<float>::max();
 
  protected:
   void setQueryTimeZone(const std::string& timeZone) {
@@ -1134,6 +1130,66 @@ TEST_F(DateTimeFunctionsTest, millisToTimestamp) {
   EXPECT_EQ(
       millisToTimestamp(kMinBigint),
       parseTimestamp("-292275055-05-16 16:47:04.192"));
+}
+
+TEST_F(DateTimeFunctionsTest, secondsToTimestamp) {
+  const auto secondsToTimestamp = [&](double seconds) {
+    return evaluateOnce<Timestamp, double>("timestamp_seconds(c0)", seconds);
+  };
+
+  const auto secondsToTimestampFloat = [&](float seconds) {
+    return evaluateOnce<Timestamp, float>("timestamp_seconds(c0)", seconds);
+  };
+
+  // Tests using integer seconds input.
+  EXPECT_EQ(secondsToTimestamp(1), parseTimestamp("1970-01-01 00:00:01"));
+  EXPECT_EQ(secondsToTimestamp(-1), parseTimestamp("1969-12-31 23:59:59"));
+  EXPECT_EQ(
+      secondsToTimestamp(1230219000),
+      parseTimestamp("2008-12-25 15:30:00"));
+
+  EXPECT_EQ(
+      secondsToTimestamp(kMaxTinyint),
+      parseTimestamp("1970-01-01 00:02:07"));
+  EXPECT_EQ(
+      secondsToTimestamp(kMinTinyint),
+      parseTimestamp("1969-12-31 23:57:52"));
+  EXPECT_EQ(
+      secondsToTimestamp(kMaxSmallint),
+      parseTimestamp("1970-01-01 09:06:07"));
+  EXPECT_EQ(
+      secondsToTimestamp(kMinSmallint),
+      parseTimestamp("1969-12-31 14:53:52"));
+  EXPECT_EQ(secondsToTimestamp(kMax), parseTimestamp("2038-01-19 03:14:07"));
+  EXPECT_EQ(secondsToTimestamp(kMin), parseTimestamp("1901-12-13 20:45:52"));
+
+  // Tests using floating-point seconds input.
+  EXPECT_EQ(secondsToTimestamp(1.0), parseTimestamp("1970-01-01 00:00:01"));
+  EXPECT_EQ(secondsToTimestamp(-1.0), parseTimestamp("1969-12-31 23:59:59"));
+  EXPECT_EQ(
+      secondsToTimestamp(1230219000.123),
+      parseTimestamp("2008-12-25 15:30:00.123"));
+
+  EXPECT_EQ(
+      secondsToTimestamp(0.127),
+      parseTimestamp("1970-01-01 00:00:00.127"));
+  EXPECT_EQ(
+      secondsToTimestamp(-0.128),
+      parseTimestamp("1969-12-31 23:59:59.872"));
+  EXPECT_EQ(
+      secondsToTimestamp(32.767),
+      parseTimestamp("1970-01-01 00:00:32.767"));
+  EXPECT_EQ(
+      secondsToTimestamp(-32.768),
+      parseTimestamp("1969-12-31 23:59:27.232"));
+  EXPECT_EQ(secondsToTimestamp(20.523), parseTimestamp("1970-01-01 00:00:20.523"));
+  EXPECT_EQ(secondsToTimestamp(-20.524), parseTimestamp("1969-12-31 23:59:39.476"));
+  EXPECT_EQ(
+      secondsToTimestamp(2147483647.123),
+      parseTimestamp("2038-01-19 03:14:07.123"));
+  EXPECT_EQ(
+      secondsToTimestamp(-2147483648.567),
+      parseTimestamp("1901-12-13 20:45:51.433"));
 }
 
 TEST_F(DateTimeFunctionsTest, timestampToMicros) {

@@ -228,32 +228,19 @@ struct Timestamp {
   std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>
   toTimePointMs(bool allowOverflow = false) const;
 
-  static Timestamp fromSeconds(int64_t seconds) {
-    return Timestamp(seconds, 0);
-  }
-
   static Timestamp fromSeconds(double seconds) {
     int64_t wholeSeconds = static_cast<int64_t>(seconds);
     double fractionalSeconds = seconds - wholeSeconds;
-
-    int64_t nano = static_cast<int64_t>(fractionalSeconds * 1'000'000'000);
+    int64_t nano =
+        static_cast<int64_t>(std::round(fractionalSeconds * 1'000'000) * 1'000);
 
     if (seconds < 0 && fractionalSeconds != 0) {
       wholeSeconds -= 1;
-      nano = static_cast<uint64_t>((fractionalSeconds + 1) * 1'000'000'000);
+      nano = static_cast<int64_t>(
+          std::round((fractionalSeconds + 1) * 1'000'000) * 1'000);
     }
 
     return Timestamp(wholeSeconds, nano);
-  }
-
-  static Timestamp fromSecondsNoError(int64_t seconds)
-#if defined(__has_feature)
-#if __has_feature(__address_sanitizer__)
-      __attribute__((__no_sanitize__("signed-integer-overflow")))
-#endif
-#endif
-  {
-    return Timestamp(seconds, 0);
   }
 
   static Timestamp fromMillis(int64_t millis) {

@@ -956,8 +956,8 @@ struct SecondsToTimestampFunction {
   VELOX_DEFINE_FUNCTION_TYPES(TExec);
 
   template <typename T>
-  FOLLY_ALWAYS_INLINE void call(out_type<Timestamp>& result, const T& millis) {
-    result = Timestamp::fromSecondsNoError(millis);
+  FOLLY_ALWAYS_INLINE void call(out_type<Timestamp>& result, const T& seconds) {
+    result = Timestamp::fromSeconds(seconds);
   }
 };
 
