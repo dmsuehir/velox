@@ -1137,7 +1137,7 @@ TEST_F(DateTimeFunctionsTest, secondsToTimestamp) {
     return evaluateOnce<Timestamp, double>("timestamp_seconds(c0)", seconds);
   };
 
-  // Tests using integer seconds input.
+  // Tests using integer seconds
   EXPECT_EQ(secondsToTimestamp(1), parseTimestamp("1970-01-01 00:00:01"));
   EXPECT_EQ(secondsToTimestamp(-1), parseTimestamp("1969-12-31 23:59:59"));
   EXPECT_EQ(
@@ -1159,7 +1159,7 @@ TEST_F(DateTimeFunctionsTest, secondsToTimestamp) {
   EXPECT_EQ(secondsToTimestamp(kMax), parseTimestamp("2038-01-19 03:14:07"));
   EXPECT_EQ(secondsToTimestamp(kMin), parseTimestamp("1901-12-13 20:45:52"));
 
-  // Tests using floating-point seconds input.
+  // Tests using floating-point seconds
   EXPECT_EQ(secondsToTimestamp(1.0), parseTimestamp("1970-01-01 00:00:01"));
   EXPECT_EQ(secondsToTimestamp(-1.0), parseTimestamp("1969-12-31 23:59:59"));
   EXPECT_EQ(
