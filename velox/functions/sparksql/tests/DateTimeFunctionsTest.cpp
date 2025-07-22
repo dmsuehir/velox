@@ -1137,10 +1137,6 @@ TEST_F(DateTimeFunctionsTest, secondsToTimestamp) {
     return evaluateOnce<Timestamp, double>("timestamp_seconds(c0)", seconds);
   };
 
-  const auto secondsToTimestampFloat = [&](float seconds) {
-    return evaluateOnce<Timestamp, float>("timestamp_seconds(c0)", seconds);
-  };
-
   // Tests using integer seconds input.
   EXPECT_EQ(secondsToTimestamp(1), parseTimestamp("1970-01-01 00:00:01"));
   EXPECT_EQ(secondsToTimestamp(-1), parseTimestamp("1969-12-31 23:59:59"));

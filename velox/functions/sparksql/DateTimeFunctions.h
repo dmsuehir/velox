@@ -16,6 +16,9 @@
 
 #pragma once
 
+#include <iostream>
+#include <type_traits>
+
 #include <boost/algorithm/string.hpp>
 
 #include "velox/functions/lib/DateTimeFormatter.h"
@@ -957,7 +960,13 @@ struct SecondsToTimestampFunction {
 
   template <typename T>
   FOLLY_ALWAYS_INLINE void call(out_type<Timestamp>& result, const T& seconds) {
-    result = Timestamp::fromSeconds(seconds);
+
+    if constexpr (std::is_integral_v<T>) {
+      result = Timestamp::fromSecondsNoError(static_cast<int64_t>(seconds));
+    } else {
+      result = Timestamp::fromSeconds(static_cast<double>(seconds));
+    }
+
   }
 };
 

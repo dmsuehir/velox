@@ -243,6 +243,20 @@ struct Timestamp {
     return Timestamp(wholeSeconds, nano);
   }
 
+  static Timestamp fromSeconds(int64_t seconds) {
+    return Timestamp(seconds, 0);
+  }
+
+  static Timestamp fromSecondsNoError(int64_t seconds)
+#if defined(__has_feature)
+#if __has_feature(__address_sanitizer__)
+      __attribute__((__no_sanitize__("signed-integer-overflow")))
+#endif
+#endif
+  {
+    return Timestamp(seconds, 0);
+  }
+
   static Timestamp fromMillis(int64_t millis) {
     if (millis >= 0 || millis % 1'000 == 0) {
       return Timestamp(millis / 1'000, (millis % 1'000) * 1'000'000);
