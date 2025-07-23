@@ -1145,14 +1145,12 @@ TEST_F(DateTimeFunctionsTest, secondsToTimestamp) {
   EXPECT_EQ(intSecondsToTimestamp(1), parseTimestamp("1970-01-01 00:00:01"));
   EXPECT_EQ(intSecondsToTimestamp(-1), parseTimestamp("1969-12-31 23:59:59"));
   EXPECT_EQ(
-      intSecondsToTimestamp(1230219000),
-      parseTimestamp("2008-12-25 15:30:00"));
+      intSecondsToTimestamp(1230219000), parseTimestamp("2008-12-25 15:30:00"));
   EXPECT_EQ(
       intSecondsToTimestamp(253402300799),
       parseTimestamp("9999-12-31 23:59:59"));
   EXPECT_EQ(
-      intSecondsToTimestamp(-62167219200),
-      parseTimestamp("0000-01-01 0:0:0"));
+      intSecondsToTimestamp(-62167219200), parseTimestamp("0000-01-01 0:0:0"));
   EXPECT_EQ(
       intSecondsToTimestamp(kMaxTinyint),
       parseTimestamp("1970-01-01 00:02:07"));
@@ -1170,11 +1168,9 @@ TEST_F(DateTimeFunctionsTest, secondsToTimestamp) {
 
   // Tests using floating-point seconds
   EXPECT_EQ(
-      decimalSecondsToTimestamp(1.0),
-      parseTimestamp("1970-01-01 00:00:01"));
+      decimalSecondsToTimestamp(1.0), parseTimestamp("1970-01-01 00:00:01"));
   EXPECT_EQ(
-      decimalSecondsToTimestamp(-1.0),
-      parseTimestamp("1969-12-31 23:59:59"));
+      decimalSecondsToTimestamp(-1.0), parseTimestamp("1969-12-31 23:59:59"));
   EXPECT_EQ(
       decimalSecondsToTimestamp(1230219000.123),
       parseTimestamp("2008-12-25 15:30:00.123"));

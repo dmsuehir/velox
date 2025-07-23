@@ -231,14 +231,16 @@ struct Timestamp {
   static Timestamp fromSeconds(double seconds) {
     int64_t wholeSeconds = static_cast<int64_t>(seconds);
     double fractionalSeconds = seconds - wholeSeconds;
-    int64_t nano =
-        static_cast<int64_t>(std::round(fractionalSeconds * 1'000'000) * 1'000);
 
     if (seconds < 0 && fractionalSeconds != 0) {
       wholeSeconds -= 1;
-      nano = static_cast<int64_t>(
-          std::round((fractionalSeconds + 1) * 1'000'000) * 1'000);
+      fractionalSeconds += 1;
     }
+
+    // To avoid floating point arithmetic precision issues, multiply and round
+    // the fractional seconds then multiply the result to get nanoseconds.
+    int64_t nano =
+        static_cast<int64_t>(std::round(fractionalSeconds * 1'000'000) * 1'000);
 
     return Timestamp(wholeSeconds, nano);
   }
