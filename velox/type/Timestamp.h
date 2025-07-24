@@ -245,10 +245,6 @@ struct Timestamp {
     return Timestamp(wholeSeconds, nano);
   }
 
-  static Timestamp fromSeconds(int64_t seconds) {
-    return Timestamp(seconds, 0);
-  }
-
   static Timestamp fromSecondsNoError(int64_t seconds)
 #if defined(__has_feature)
 #if __has_feature(__address_sanitizer__)
